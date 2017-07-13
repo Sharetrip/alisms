@@ -6,7 +6,7 @@
  * Time: 14:20
  */
 
-namespace alidayu\sms;
+namespace Sharetrip\Alisms;
 
 
 use Dysmsapi\Request\V20170525\SendSmsRequest;
