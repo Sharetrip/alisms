@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Sharetrip\\Alisms\\": ""src/""
+      "Sharetrip\\Alisms\\": "src/"
     }
   }
 }
