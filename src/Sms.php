@@ -10,9 +10,9 @@ namespace Sharetrip\Alisms;
 
 
 use Dysmsapi\Request\V20170525\SendSmsRequest;
-include '../api_sdk/aliyun-php-sdk-core/Config.php';
-include_once '../api_sdk/Dysmsapi/Request/V20170525/SendSmsRequest.php';
-include_once '../api_sdk/Dysmsapi/Request/V20170525/QuerySendDetailsRequest.php';
+include 'aliyun-php-sdk-core/Config.php';
+include_once 'Dysmsapi/Request/V20170525/SendSmsRequest.php';
+include_once 'Dysmsapi/Request/V20170525/QuerySendDetailsRequest.php';
 
 class Sms
 {
@@ -21,20 +21,14 @@ class Sms
 
     public $error = "";
 
-
-    /**
-     * Sms constructor.
-     * @param $options
-     * @throws \ClientException
-     */
     public function __construct( $options )
     {
         if ( !$options['access_key_id'] ) {
-            throw new \ClientException("参数缺失：appkey必须要设置");
+            return "accessId , 为必填参数";
         }
 
-        if ( $options['access_key_secret'] ) {
-            throw new \ClientException("参数缺失：access_key_secret必须要设置");
+        if ( !$options['access_key_secret'] ) {
+            return "secret , 为必填参数";
         }
         $this->accessKeyId = $options['access_key_id'];
         $this->accessKeySecret = $options['access_key_secret'];
@@ -45,8 +39,8 @@ class Sms
      * @param $sms_config
      * @return mixed|\SimpleXMLElement|void
      */
-    public function sendSms( $sms_config ){
-
+    public function sendSms( $sms_config =[] )
+    {
         //短信API产品名
         $product = "Dysmsapi";
         //短信API产品域名
@@ -80,15 +74,17 @@ class Sms
         }
 
         $request = new SendSmsRequest();
-        $request->setPhoneNumbers($sms_config['PhoneNumbers']);
+
+        //必填-短信接收号码
+        $request->setPhoneNumbers($sms_config["PhoneNumbers"]);
         //必填-短信签名
-        $request->setSignName($sms_config['SignName']);
+        $request->setSignName($sms_config["SignName"]);
         //必填-短信模板Code
-        $request->setTemplateCode($sms_config['TemplateCode']);
+        $request->setTemplateCode($sms_config["TemplateCode"]);
         //选填-假如模板中存在变量需要替换则为必填(JSON格式)
-        $request->setTemplateParam('{"number":"'.$sms_config['number'].'","product":"分享之旅"}');
+        $request->setTemplateParam('{"number":"'.$sms_config["number"].'","product":"'.$sms_config["SignName"].'"}');
         //选填-发送短信流水号
-        $request->setOutId(isset($sms_config['serialNumber']) ? $sms_config['serialNumber'] : rand(1000,9999) );
+        $request->setOutId($sms_config["serialNumber"]);
 
         //发起访问请求
         $acsResponse = $acsClient->getAcsResponse($request);
