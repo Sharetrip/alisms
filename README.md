@@ -1,7 +1,3 @@
-Yii2 阿里云短信服务接口 
-
-安装方法：
-composer require sharetrip/alisms
 
 Yii2 阿里云短信服务接口
 
